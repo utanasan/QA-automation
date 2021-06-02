@@ -1,10 +1,12 @@
 import unittest
 from selenium import webdriver
+from selenium.webdriver.support.select import Select
+import time
 
 
 class OnlinerSearch(unittest.TestCase):
     def setUp(self):
-        self.driver = webdriver.Firefox()
+        self.driver = webdriver.Chrome()
 
     def test_vacancy(self):
         driver = self.driver
@@ -28,10 +30,22 @@ class OnlinerSearch(unittest.TestCase):
     def test_superprice(self):
         driver = self.driver
         driver.get("https://www.onliner.by/")
-        driver.implicitly_wait(5)
+
+        time.sleep(10)
         elem = driver.find_element_by_xpath("/html/body/div[1]/div/div/div/header/div[2]/div/nav/ul[1]/li[1]/a[1]/div")
+        time.sleep(10)
         elem.click()
-        assert "по суперцене" in driver.page_source
+        self.assertIn("Каталог.Onliner", driver.page_source)
+
+    def test_auto_select(self):
+        driver = self.driver
+        driver.get("https://www.onliner.by/")
+        driver.implicitly_wait(5)
+        s3 = Select(driver.find_element_by_xpath('//*[@id="car-1"]/select'))
+        s3.select_by_value('BMW')
+        elem = driver.find_element_by_xpath('//*[@id="container"]/div/div/div/div/div[9]/div/div[1]/div/div[2]/div/a')
+        elem.click()
+        self.assertIn("BMW", driver.page_source)
 
 
     def tearDown(self):
