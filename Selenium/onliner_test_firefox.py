@@ -30,10 +30,7 @@ class OnlinerSearch(unittest.TestCase):
     def test_superprice(self):
         driver = self.driver
         driver.get("https://www.onliner.by/")
-
-        time.sleep(10)
         elem = driver.find_element_by_xpath("/html/body/div[1]/div/div/div/header/div[2]/div/nav/ul[1]/li[1]/a[1]/div")
-        time.sleep(10)
         elem.click()
         self.assertIn("Каталог.Onliner", driver.page_source)
 
@@ -46,6 +43,16 @@ class OnlinerSearch(unittest.TestCase):
         elem = driver.find_element_by_xpath('//*[@id="container"]/div/div/div/div/div[9]/div/div[1]/div/div[2]/div/a')
         elem.click()
         self.assertIn("BMW", driver.page_source)
+
+
+    def test_empty_card(self):
+        driver = self.driver
+        driver.get("https://www.onliner.by/")
+        driver.implicitly_wait(5)
+        elem = driver.find_element_by_xpath("/html/body/div[1]/div/div/div/header/div[3]/div/div[2]/div[2]/div[3]/div/a")
+        elem.click()
+        self.assertIn("Ваша корзина пуста", driver.page_source)
+
 
 
     def tearDown(self):
